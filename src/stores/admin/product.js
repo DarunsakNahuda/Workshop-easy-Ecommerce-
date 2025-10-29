@@ -1,0 +1,137 @@
+import { defineStore } from 'pinia'
+import { collection, doc, getDoc, getDocs, addDoc, setDoc, deleteDoc, query, where, orderBy,limit, startAfter,endBefore,limitToLast,getCountFromServer } from 'firebase/firestore'
+import { db } from '@/firebase'
+
+export const useAdminProductStore = defineStore('admin-product', {
+    state: () => ({
+        docList:[],
+        filter: {
+            search: '',
+            status: '',
+            sort: {
+                updatedAt: 'desc'
+            }
+        }
+    }),
+    getters:{
+        list(state){
+            return state.docList.map(doc => {
+                const convertedProduct = doc.data()
+                convertedProduct.productId = doc.id
+                convertedProduct.updatedAt= convertedProduct.updatedAt.toDate()
+                return convertedProduct
+            })
+        },
+        totalPage(state){
+            return Math.ceil(state.total/2)
+        }
+    },
+    actions: {
+        async loadProducts() {
+            let productCol = query(
+                collection(db, 'products'),
+                orderBy('updatedAt', this.filter.sort.updatedAt) 
+            )
+
+            if (this.filter.search) {
+                productCol = query(productCol, where('name', '==', this.filter.search))
+            }
+            
+            if (this.filter.status) {
+                productCol = query(productCol, where('status', '==', this.filter.status))
+            }
+
+            const rawProductCol = productCol
+
+            productCol = query(productCol,limit(2))
+
+            const productSnapshot = await getDocs(productCol)
+            this.docList= productSnapshot.docs   
+            
+            const allSnapshot = await getCountFromServer(rawProductCol)
+            this.total = allSnapshot.data().count
+        },
+
+        async loadNextProduct (mode){
+            let productCol = query(
+                collection(db, 'products'),
+                orderBy('updatedAt', this.filter.sort.updatedAt) 
+            )
+            if (mode === 'next') {
+                const lastDocument = this.docList[this.docList.length-1]
+
+                productCol = query(
+                    productCol,
+                    startAfter(lastDocument),
+                    limit(2)
+                )
+            } else {
+                const firstDocument = this.docList[0]
+                productCol = query(
+                    productCol,
+                    endBefore(firstDocument),
+                    limitToLast(2)
+                )
+            }
+            const productSnapshot = await getDocs(productCol)
+            this.docList = productSnapshot.docs
+        },
+
+        async getProduct(productId) {
+            try {
+                const productRef = doc(db, 'products', productId)
+                const productSnapshot = await getDoc(productRef)
+                return productSnapshot.data()
+            } catch (error) {
+                console.log('error', error)
+                throw error // แจ้งเตือนข้อผิดพลาด
+            }
+        },
+
+        async addProduct(productData) {
+            try {
+                productData.remainQuantity = productData.quantity
+                productData.updatedAt = new Date()
+                const productCol = collection(db, 'products')
+                await addDoc(productCol, productData)
+                
+            } catch (error) {
+                console.log('error', error)
+               
+            }
+        },
+
+        async updatedProduct(productId, productData) {
+            try {
+                const updatedProduct = {
+                    name: productData.name,
+                    imageUrl: productData.imageUrl,
+                    quantity: productData.quantity,
+                    price: productData.price,
+                    remainQuantity: productData.quantity,
+                    status: productData.status,
+                    about: productData.about,
+                    updatedAt: new Date()
+                }
+
+                const productRef = doc(db, 'products', productId)
+                await setDoc(productRef, updatedProduct)
+                return true // ส่งคืนค่าหากสำเร็จ
+            } catch (error) {
+                console.log('error', error)
+                return false // ส่งคืนค่าหากล้มเหลว
+            }
+        },
+
+        async removeProduct(productId) {
+            try {
+                const productRef = doc(db, 'products', productId)
+                await deleteDoc(productRef)
+                return true // ส่งคืนค่าหากสำเร็จ
+            } catch (error) {
+                console.log('error', error)
+                return false // ส่งคืนค่าหากล้มเหลว
+            }
+        }
+    }
+})

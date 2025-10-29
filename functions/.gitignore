@@ -1,0 +1,14 @@
+node_modules/
+service-accout.json
+.local
+.env
+.env.local
+.env.production
+node_modules/
+dist/
+.vscode/
+.firebase/
+*.log
+ui-debug.log
+database-debug.log
+firestore-debug.log
