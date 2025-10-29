@@ -1,7 +1,8 @@
 # 🌐 easy-Ecommerce
 
 โปรเจกต์นี้เป็นระบบเว็บแอปพลิเคชันขายสินค้าออนไลน์ที่ใช้ Vue.js กับ Firebase เพื่อจัดการข้อมูลและระบบ Authentication รวมถึง Omise สำหรับระบบชำระเงิน
-<img width="642" height="530" alt="image" src="https://github.com/user-attachments/assets/0e464816-1169-48f4-895e-a595879893d8" />
+<img width="1887" height="947" alt="image" src="https://github.com/user-attachments/assets/ae44cc2f-2008-4666-a67c-4a26b2e1a5f1" />
+
 ---
 
 ## 🚀 Tech Stack
@@ -20,7 +21,6 @@
 - [Omise](https://www.omise.co/) — ระบบชำระเงินออนไลน์  
 
 
-<img width="642" height="530" alt="image" src="https://github.com/user-attachments/assets/0e464816-1169-48f4-895e-a595879893d8" />
 <img width="1903" height="949" alt="image" src="https://github.com/user-attachments/assets/bfe4aa83-1592-46d1-82d7-8e7254eeae6d" />
 <img width="1886" height="940" alt="image" src="https://github.com/user-attachments/assets/3236eff3-5821-4bbd-b2ab-e90be1a0919a" />
 
