@@ -1,7 +1,7 @@
-<img width="740" height="604" alt="image" src="https://github.com/user-attachments/assets/e860d492-f069-4194-a7db-cf03da57f6af" /># 🌐 easy-Ecommerce
+# 🌐 easy-Ecommerce
 
 โปรเจกต์นี้เป็นระบบเว็บแอปพลิเคชันขายสินค้าออนไลน์ที่ใช้ Vue.js กับ Firebase เพื่อจัดการข้อมูลและระบบ Authentication รวมถึง Omise สำหรับระบบชำระเงิน
-
+<img width="642" height="530" alt="image" src="https://github.com/user-attachments/assets/0e464816-1169-48f4-895e-a595879893d8" />
 ---
 
 ## 🚀 Tech Stack
